@@ -1,11 +1,11 @@
 # Installation guide
 
-Step-by-step setup for `@signalhousellc/medusa-plugin` in your own Medusa backend.
+Step-by-step setup for `@signalhouse-sms/medusa-plugin` in your own Medusa backend.
 
 ## 1. Install the package
 
 ```bash
-npm install @signalhousellc/medusa-plugin
+npm install @signalhouse-sms/medusa-plugin
 ```
 
 Requires Medusa 2.19+ and Node 20.19+ or 22.12+.
@@ -18,7 +18,7 @@ In your Medusa project's `medusa-config.ts`:
 module.exports = defineConfig({
   // ...
   plugins: [
-    "@signalhousellc/medusa-plugin",
+    "@signalhouse-sms/medusa-plugin",
   ],
   modules: [
     {
@@ -26,7 +26,7 @@ module.exports = defineConfig({
       options: {
         providers: [
           {
-            resolve: "@signalhousellc/medusa-plugin/providers/signalhouse-sms",
+            resolve: "@signalhouse-sms/medusa-plugin/providers/signalhouse-sms",
             id: "signalhouse-sms",
             options: {
               channels: ["sms"],

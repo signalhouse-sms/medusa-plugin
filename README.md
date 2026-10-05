@@ -22,7 +22,7 @@ account and API key.
 **1. Install**
 
 ```bash
-npm install @signalhousellc/medusa-plugin
+npm install @signalhouse-sms/medusa-plugin
 ```
 
 **2. Register the plugin and the SMS provider** in `medusa-config.ts`:
@@ -30,14 +30,14 @@ npm install @signalhousellc/medusa-plugin
 ```ts
 module.exports = defineConfig({
   // ...
-  plugins: ["@signalhousellc/medusa-plugin"],
+  plugins: ["@signalhouse-sms/medusa-plugin"],
   modules: [
     {
       resolve: "@medusajs/medusa/notification",
       options: {
         providers: [
           {
-            resolve: "@signalhousellc/medusa-plugin/providers/signalhouse-sms",
+            resolve: "@signalhouse-sms/medusa-plugin/providers/signalhouse-sms",
             id: "signalhouse-sms",
             options: {
               channels: ["sms"],
@@ -66,7 +66,7 @@ Paste your API key, then fill in the 10DLC brand registration form.
 **5. Add an SMS opt-in checkbox to checkout.** Your storefront calls
 `POST /store/sms-consent/join-prompt` with the cart id; the customer gets a "Reply JOIN to confirm"
 text, and their reply is what opts them in. A ready-made Next.js checkbox is in the
-[consent guide](https://unpkg.com/@signalhousellc/medusa-plugin/docs/CONSENT_INTEGRATION.md).
+[consent guide](https://unpkg.com/@signalhouse-sms/medusa-plugin/docs/CONSENT_INTEGRATION.md).
 
 **6. Receive replies and delivery updates.** In Signal House, create a webhook endpoint pointing to
 `https://<your-medusa-backend>/webhooks/signalhouse`, subscribed to `MESSAGE_RECEIVED`,
@@ -103,13 +103,13 @@ Set these on your Medusa host.
 ## Cart recovery and broadcasts
 
 Both ship turned off so each store decides when to send. Before turning them on, read the
-[compliance checklist](https://unpkg.com/@signalhousellc/medusa-plugin/docs/COMPLIANCE_CHECKLIST.md).
+[compliance checklist](https://unpkg.com/@signalhouse-sms/medusa-plugin/docs/COMPLIANCE_CHECKLIST.md).
 The main thing to plan for is send timing: keep these texts between 8am and 9pm in your customers'
 local time.
 
 - **Cart recovery** checks every 15 minutes and sends at most one text per phone number per 24
   hours. Only carts abandoned after you turn it on are texted, so enabling it never messages last
-  week's carts. The [cart recovery route guide](https://unpkg.com/@signalhousellc/medusa-plugin/docs/CART_RECOVERY_ROUTE.md)
+  week's carts. The [cart recovery route guide](https://unpkg.com/@signalhouse-sms/medusa-plugin/docs/CART_RECOVERY_ROUTE.md)
   has a Next.js route for the link.
 - **Broadcasts** are composed in the admin under **SH Broadcasts**, sent to every opted-in customer
   or one customer group, and can be scheduled. Consent is re-checked right before each send.
@@ -129,12 +129,12 @@ and the admin page shows your plan and wallet status with a link to manage billi
 
 ## Guides
 
-The full guides ship with the package in `node_modules/@signalhousellc/medusa-plugin/docs/`:
+The full guides ship with the package in `node_modules/@signalhouse-sms/medusa-plugin/docs/`:
 
-- [Installation](https://unpkg.com/@signalhousellc/medusa-plugin/docs/INSTALLATION.md)
-- [Consent integration](https://unpkg.com/@signalhousellc/medusa-plugin/docs/CONSENT_INTEGRATION.md)
-- [Compliance checklist](https://unpkg.com/@signalhousellc/medusa-plugin/docs/COMPLIANCE_CHECKLIST.md)
-- [Cart recovery route](https://unpkg.com/@signalhousellc/medusa-plugin/docs/CART_RECOVERY_ROUTE.md)
+- [Installation](https://unpkg.com/@signalhouse-sms/medusa-plugin/docs/INSTALLATION.md)
+- [Consent integration](https://unpkg.com/@signalhouse-sms/medusa-plugin/docs/CONSENT_INTEGRATION.md)
+- [Compliance checklist](https://unpkg.com/@signalhouse-sms/medusa-plugin/docs/COMPLIANCE_CHECKLIST.md)
+- [Cart recovery route](https://unpkg.com/@signalhouse-sms/medusa-plugin/docs/CART_RECOVERY_ROUTE.md)
 
 ## Support
 
