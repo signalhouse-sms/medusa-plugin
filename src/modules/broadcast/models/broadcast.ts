@@ -9,7 +9,7 @@ import { model } from "@medusajs/framework/utils";
  * re-checking each recipient's consent immediately before actually sending (a broadcast can sit
  * `scheduled` for days; consent can be revoked in that window).
  *
- * `status: "draft"` is defined but unused until Phase 4's admin UI adds a save-without-sending
+ * `status: "draft"` is defined but unused until the admin UI adds a save-without-sending
  * flow — every broadcast created by `POST /admin/signalhouse/broadcasts` today goes straight to
  * `scheduled`, `sending`, or (a zero-recipient audience) `sent`.
  */

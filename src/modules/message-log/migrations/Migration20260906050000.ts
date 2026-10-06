@@ -7,7 +7,7 @@ import { Migration } from "@medusajs/framework/mikro-orm/migrations";
  * Lives in THIS module's own migrations directory, not `broadcast`'s, even though `broadcast` is
  * what needs it — Medusa tracks each module's migrations independently, so a cross-module `CREATE
  * INDEX` from another module's migration file has no guaranteed ordering against this table's own
- * creation (ai-review, PR #1318, round 4).
+ * creation.
  */
 export class Migration20260906050000 extends Migration {
 

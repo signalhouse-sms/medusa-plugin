@@ -24,7 +24,7 @@ const STOP_MENTION = /\bstop\b/i;
  * match: different send sites store the recipient in whatever format they naturally have it
  * (free-text checkout input, Infobip's bare-digit inbound sender field, a customer record's own
  * format) — an exact match would silently stop working the moment two sites represent the same
- * real number differently, which ai-review caught as a real regression once a second format
+ * real number differently, which was a real regression once a second format
  * entered the picture. If the input phone itself can't be normalized, this fails safe by treating
  * it as "no prior outbound found" (footer included) rather than guessing.
  * @async

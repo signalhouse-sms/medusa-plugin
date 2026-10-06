@@ -37,7 +37,7 @@ function pickCurrentSubscription(subscriptions: UserSubscription[]): UserSubscri
  * fields (`subscriptionError`/`walletError`), not one combined error — a caller needs to tell "this
  * account genuinely has no plan" (`subscription: null`, no error) apart from "the read failed"
  * (`subscription: null`, `subscriptionError` set), since those two states call for opposite UI
- * treatment (ai-review, PR #1325). Each call also carries an explicit timeout
+ * treatment. Each call also carries an explicit timeout
  * (`SignalHouseSDK`'s underlying axios client has none by default), so a hung upstream surfaces as
  * an error field within {@link BILLING_STATUS_TIMEOUT_MS} instead of hanging the caller indefinitely.
  * @async

@@ -37,7 +37,7 @@ class BroadcastModuleService extends MedusaService({
 	 * would be visible to `jobs/broadcast-send.ts` (which polls every minute) for the entire
 	 * duration of the recipient bulk insert, before any recipient rows exist. That job selects on
 	 * `status: "sending"`, finds zero pending/sending recipients (they haven't committed yet), and
-	 * — since Phase 2's round-4 ai-review finding — would otherwise finalize the broadcast as `sent`
+	 * would otherwise finalize the broadcast as `sent`
 	 * with nobody ever messaged. `draft` is a status `listDueBroadcasts` never selects, so the job
 	 * cannot observe (or prematurely finalize) a broadcast still in the middle of this method.
 	 *

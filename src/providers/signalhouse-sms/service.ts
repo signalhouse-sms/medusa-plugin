@@ -71,7 +71,7 @@ export class SignalHouseSmsNotificationService extends AbstractNotificationProvi
 		// same number already passed consent's own normalized lookup. `normalizeForSignalHouseSend`
 		// fixes exactly that (punctuation failing `^\d+$`) without narrowing to NANP-only — an
 		// earlier version of this fix used the NANP-only `normalizeNanpPhone` here and rejected every
-		// valid international recipient the API itself accepts (ai-review finding, PR #1326).
+		// valid international recipient the API itself accepts.
 		const normalizedTo = normalizeForSignalHouseSend(notification.to);
 		if (!normalizedTo) {
 			throw new MedusaError(MedusaError.Types.INVALID_DATA, `signalhouse-sms: "${notification.to}" does not contain at least 10 digits`);

@@ -17,7 +17,7 @@ const DEFAULT_WINDOW_DAYS = 90;
  * `marketing` sends in the window, not a fetch-and-reduce in the app — converted rows scale with
  * total marketing volume (a roughly fixed conversion rate), not with how many conversions
  * happened, so "fetch every converted row" is not the bounded query an earlier version of this
- * route assumed it was (ai-review, PR #1321); `message_log` is sized for a 10M-msg/hr-scale store.
+ * route assumed it was; `message_log` is sized for a 10M-msg/hr-scale store.
  * `segment_count` (the per-message cost-basis input) is only known once a DLR confirms it
  * (`recordDelivery`) — a send still awaiting that callback, or one whose DLR never arrives, falls
  * back to 1 (every sent SMS costs at least one segment), rather than being excluded or treated as

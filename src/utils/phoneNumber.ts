@@ -39,8 +39,7 @@ export function normalizeNanpPhone(raw: string): string | null {
  * unconditionally, which silently rewrote a real 10-digit E.164 number with no `+` context
  * preserved — e.g. Denmark's `+45 20 12 34 56` — into a bogus NANP number and sent it to the wrong
  * destination. Fixed by checking for `+` first, before ever consulting `normalizeNanpPhone`
- * (ai-review finding, PR #1326; an earlier version of THIS same fix also broke every non-NANP
- * recipient a different way — see this function's own git history for that first, narrower bug).
+ * (an earlier version of this fix also broke every non-NANP recipient a different way).
  * @param {string} raw - The phone number as originally captured or configured.
  * @returns {string | null} The digits-only wire form, or `null` if fewer than 10 digits remain.
  */

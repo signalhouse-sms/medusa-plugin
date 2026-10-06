@@ -10,7 +10,7 @@ export const JOIN_CONSENT_VERSION = "v1-keyword-join";
 const CLAIM_KEY_PREFIX = "join-consent:";
 // Bounds the claim by age so a process crash between the claim commit and the release below (a
 // deploy or restart mid-request) self-heals instead of permanently blocking this one JOIN reply's
-// consent grant with no in-product recovery (ai-review finding, PR #1326, same class already fixed
+// consent grant with no in-product recovery (same class already fixed
 // in create-brand.ts). Per-identifier, not a global lock, so this can be generous without risking a
 // legitimate concurrent grant for a DIFFERENT inbound message.
 const CLAIM_TTL_MINUTES = 5;
@@ -20,7 +20,7 @@ export type GrantJoinConsentStepInput = {
 	/** The inbound message's own id — same value `sendJoinConfirmationStep` claims on, see below. */
 	identifier: string;
 	/** The verbatim inbound SMS body that carried the JOIN keyword (`message.messageBody` off the
-	 * webhook payload, unnormalized). Recorded as `consentText` -- see the ai-review finding in the
+	 * webhook payload, unnormalized). Recorded as `consentText` -- see the note in the
 	 * JSDoc below for why this, and not any of our own outbound copy, is the correct artifact. */
 	inboundMessageBody: string;
 };
@@ -56,8 +56,7 @@ export type GrantJoinConsentStepInput = {
  * the customer already gave via an actual SMS reply. The grant and the confirmation are
  * independent facts; only the confirmation is allowed to fail without consequence.
  *
- * `consentText` records the verbatim inbound JOIN reply, not any outbound copy of ours (ai-review
- * finding, PR #1348 round 2). The consent-text column exists to capture the language the recipient
+ * `consentText` records the verbatim inbound JOIN reply, not any outbound copy of ours. The consent-text column exists to capture the language the recipient
  * agreed to; the JOIN *prompt* SMS is the closest candidate but is sent by a separate, unconnected
  * route (`send-join-prompt.ts` / the storefront join-prompt endpoint) that this workflow has no
  * guarantee ran before a given JOIN reply (an "unsolicited" JOIN advertised outside our system is

@@ -24,7 +24,7 @@ const DEFAULT_PORTAL_URL = "https://app2.signalhouse.io";
  * page has no other way to know a "Send now" broadcast will actually be sent: on the default
  * install this flag is `false`, `createBroadcastWithRecipients` still marks an immediate broadcast
  * `sending`, and without this field the merchant sees a success toast and a broadcast stuck at
- * `sending` forever with no indication why (ai-review, PR #1322).
+ * `sending` forever with no indication why.
  * @param {ReturnType<typeof toAccountLinkResponse>} response - The account-link response to extend.
  * @returns {object} The response with `broadcastSendingEnabled` added.
  */
@@ -77,7 +77,7 @@ export async function withBillingStatus<T extends object>(
  * Billing status (2 extra outbound Signal House calls) is only fetched when the caller passes
  * `?includeBilling=1` — this route is also polled by the Broadcasts page purely for
  * `broadcastSendingEnabled` (`broadcasts/page.tsx`), which has no use for billing status and
- * shouldn't pay its latency on every load (ai-review, PR #1325). Only the Signal House settings
+ * shouldn't pay its latency on every load. Only the Signal House settings
  * page itself passes the flag.
  * @async
  * @param {MedusaRequest} req - The request.
@@ -139,7 +139,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse): Promise<void
 	// (`Migration20260906130000.ts`), so a fraction (e.g. sub-cent wholesale A2P pricing like
 	// $0.0075/segment) would either get silently rounded by Postgres or rejected there, surfacing
 	// as an opaque "Could not save pricing." with no hint that fractions are the problem
-	// (ai-review, PR #1321) — rejected here instead, with a message that says why.
+	// — rejected here instead, with a message that says why.
 	if (body.smsCostPerSegmentCents !== null && (typeof body.smsCostPerSegmentCents !== "number" || !Number.isInteger(body.smsCostPerSegmentCents) || body.smsCostPerSegmentCents < 0)) {
 		res.status(400).json({ message: "smsCostPerSegmentCents must be a non-negative whole number of cents, or null" });
 		return;

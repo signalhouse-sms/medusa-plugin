@@ -426,7 +426,7 @@ function formatWalletBalance(microdollars: number, currency: string): string {
  * Shows this account's live Signal House subscription/wallet status. Distinguishes three states per
  * field — present, confirmed absent, and unknown (the read itself failed) — rather than collapsing
  * "no plan" and "couldn't check" into the same UI, so a transient read failure never tells a
- * merchant on an active plan that they have none (ai-review, PR #1325).
+ * merchant on an active plan that they have none.
  * @param {Object} props
  * @param {Extract<AccountLinkState, { linked: true }>} props.accountLink - The linked account,
  *   including its (optionally present) `billingStatus`/`billingPortalUrl`.

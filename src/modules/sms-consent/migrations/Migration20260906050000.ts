@@ -8,8 +8,7 @@ import { Migration } from "@medusajs/framework/mikro-orm/migrations";
  * existing `(phone_number, purpose, granted_at)` index. Lives in THIS module's own migrations
  * directory, not `broadcast`'s, even though `broadcast` is what needs it — Medusa tracks each
  * module's migrations independently, so a cross-module `CREATE INDEX` from another module's
- * migration file has no guaranteed ordering against this table's own creation (ai-review, PR
- * #1318, round 4).
+ * migration file has no guaranteed ordering against this table's own creation.
  */
 export class Migration20260906050000 extends Migration {
 

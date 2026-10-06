@@ -197,7 +197,7 @@ export default async function cartAbandonmentJob(container: MedusaContainer) {
 	// Keyed on the normalized (bare 10-digit) form, not the raw string — `withStopFooter` already
 	// learned this lesson (see its own JSDoc): checkout input for the same real number varies in
 	// format ("(555) 123-4567" vs "+15551234567"), and an exact-string dedup silently stops working
-	// the moment two carts represent it differently (fable audit finding, same class of bug).
+	// the moment two carts represent it differently.
 	const seenPhones = new Set<string>();
 
 	for (const cart of candidates) {
@@ -217,7 +217,7 @@ export default async function cartAbandonmentJob(container: MedusaContainer) {
 		// 10 digits, including a non-NANP number that happens to have a 10-digit national number
 		// (e.g. Denmark, Norway); using that stripped form as `to` would erase the `+`/country-code
 		// signal `normalizeForSignalHouseSend` needs to avoid mis-treating it as a US number
-		// (ai-review finding, PR #1326). `rawPhone` — with its original formatting, `+` included when
+		//. `rawPhone` — with its original formatting, `+` included when
 		// present — is what actually flows to consent checks, the footer, and the send below.
 		//
 		// An unnormalizable phone falls through as its own raw value (can't be deduped against a

@@ -28,7 +28,7 @@ test("send() wraps `to` in an array — the API rejects a bare string (regressio
 	assert.deepEqual(capturedArgs.recipientPhoneNumbers, ["15555550199"]);
 });
 
-test("send() normalizes a checkout-formatted `to` into the bare 11-digit form the API's queueSendSMSSchema accepts (fable audit finding)", async () => {
+test("send() normalizes a checkout-formatted `to` into the bare 11-digit form the API's queueSendSMSSchema accepts", async () => {
 	const service = buildService() as any;
 	let capturedArgs: any;
 	service.sdk_.messages.sendSMS = async (args: any) => {
@@ -56,7 +56,7 @@ test("send() throws on a `to` with fewer than 10 digits, rather than sending gar
 	);
 });
 
-test("send() accepts a non-NANP international recipient the API itself allows, not just US/Canada numbers (ai-review finding, PR #1326)", async () => {
+test("send() accepts a non-NANP international recipient the API itself allows, not just US/Canada numbers", async () => {
 	const service = buildService() as any;
 	let capturedArgs: any;
 	service.sdk_.messages.sendSMS = async (args: any) => {

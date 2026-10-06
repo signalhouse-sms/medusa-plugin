@@ -79,7 +79,7 @@ const SignalHouseBroadcastsPage = () => {
 				setCustomerGroups(result.customer_groups);
 				// A store with more customer groups than this page fetches would otherwise show a
 				// picker that looks complete while some groups are simply unreachable through it —
-				// surfaced rather than hidden (ai-review, PR #1322).
+				// surfaced rather than hidden.
 				setCustomerGroupsTruncated(result.count > result.customer_groups.length);
 			})
 			.catch(() => setCustomerGroups([]));
@@ -118,7 +118,7 @@ const SignalHouseBroadcastsPage = () => {
 				// Sending is off by default on every install (see the InlineTip above the compose
 				// form) — a plain success toast here would tell the merchant sending is imminent
 				// when it isn't, and nothing else in this UI would ever correct that impression
-				// (ai-review, PR #1322).
+				//.
 				toast.warning("Broadcast created, but broadcast sending is currently disabled — it will stay queued until an admin enables it.");
 			}
 			setMessageBody("");

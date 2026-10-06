@@ -17,7 +17,7 @@ const DEFAULT_ATTRIBUTION_WINDOW_DAYS = 7;
  * — `order.placed` can be delivered late or redelivered, and anchoring to wall-clock-at-execution
  * both admits a `marketing` send that went out *after* the order (which should never be causal) and
  * can drop a genuinely-causal send that happened 7 days before the order once processing is merely
- * delayed (ai-review, PR #1321). Both SQL queries below therefore bound `sent_at` on both sides:
+ * delayed. Both SQL queries below therefore bound `sent_at` on both sides:
  * `>= orderCreatedAt - windowDays` and `<= orderCreatedAt`.
  *
  * Two independent, non-exclusive matches:
@@ -46,7 +46,7 @@ const DEFAULT_ATTRIBUTION_WINDOW_DAYS = 7;
  *    scratch), and guard (1) alone only stops two *different* orders from racing for the *same*
  *    row. Without guard (2), a customer who received two marketing sends in-window and then placed
  *    one order would have that order credited twice — once per redelivery — inflating
- *    `revenueAttributed` by the order's full amount per extra delivery (ai-review, PR #1321). The
+ *    `revenueAttributed` by the order's full amount per extra delivery. The
  *    inner `SELECT ... FOR UPDATE` (no `SKIP LOCKED` — this fires per-order, not as a batch claim,
  *    so blocking briefly on a genuine conflict is correct, not a throughput concern) locks the
  *    single latest-eligible row; a second, concurrent UPDATE targeting the same row re-evaluates

@@ -102,7 +102,7 @@ class MessageLogModuleService extends MedusaService({
 	 * exactly the case that most needs catching: a DLR webhook flips the row to `failed` sometime
 	 * after the send, and a stale-reclaimed recipient would then find "no `sent`/`delivered` row"
 	 * and genuinely resend a message that already went out and already failed on the carrier side
-	 * (ai-review, PR #1318, round 5) — a `failed` `message_log` row is not evidence the send didn't
+	 * — a `failed` `message_log` row is not evidence the send didn't
 	 * happen, it's evidence it did and then didn't deliver.
 	 * @async
 	 * @param {string} broadcastId - The broadcast to check.

@@ -36,7 +36,7 @@ test("normalizeForSignalHouseSend() accepts a non-NANP international number the 
 	assert.equal(normalizeForSignalHouseSend("+442079460958"), "442079460958");
 });
 
-test("normalizeForSignalHouseSend() does NOT reinterpret a 10-digit E.164 international number as NANP (ai-review finding, PR #1326)", () => {
+test("normalizeForSignalHouseSend() does NOT reinterpret a 10-digit E.164 international number as NANP", () => {
 	// Denmark, Norway, Iceland, Hungary etc. can have a 10-digit national number — normalizeNanpPhone
 	// alone can't tell these apart from a US number, so the explicit `+` must be what decides this,
 	// not the digit count.

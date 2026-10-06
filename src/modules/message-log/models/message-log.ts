@@ -36,14 +36,13 @@ const MessageLog = model
 		// `NOT EXISTS` check that no OTHER row already carries this same order id for this purpose
 		// (one order credits at most one row per purpose) — the second guard is what makes a
 		// redelivered/retried `order.placed` event idempotent; see that subscriber's own JSDoc for
-		// the double-credit this closes (ai-review, PR #1321).
+		// the double-credit this closes.
 		converted_order_id: model.text().nullable(),
 		// The linked order's total at the moment of attribution, in integer minor-unit cents (e.g.
 		// `1999` for $19.99) — NOT the store-currency major-unit float an earlier version of this
 		// column used. `model.float()` maps to Postgres `real` (float4, 24-bit mantissa): exact only
 		// up to roughly $41,943 at cent precision, silently rounded above that, and unrecoverable
-		// afterward since this is a denormalized snapshot with no live order reference (ai-review, PR
-		// #1321). Integer cents matches this plugin's own `sms_cost_per_segment_cents` convention and
+		// afterward since this is a denormalized snapshot with no live order reference. Integer cents matches this plugin's own `sms_cost_per_segment_cents` convention and
 		// has no such ceiling in any realistic order-total range.
 		converted_amount_cents: model.number().nullable(),
 	})

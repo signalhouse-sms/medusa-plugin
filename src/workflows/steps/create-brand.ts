@@ -28,13 +28,13 @@ const CLAIM_ID = `claim_${CLAIM_KEY}`;
 // below) — a claim only reaches that status because `/brand` may already have billed a real TCR
 // registration, and letting THAT expire would let a retry double-bill, defeating the reason the
 // claim exists at all. An earlier version of this fix aged out every claim uniformly and silently
-// reopened exactly that double-bill window (ai-review finding, PR #1326).
+// reopened exactly that double-bill window.
 const CLAIM_TTL_MINUTES = 5;
 // `buildSignalHouseClient`'s axios instance has no default timeout (confirmed: the Signal House SDK's
 // `_createClient` passes only `{baseURL, headers}`), so a black-holed connection would leave the
 // `/brand` call — and this claim's `pending` status — sitting past CLAIM_TTL_MINUTES with the call
 // still genuinely in flight. Once the claim ages out under it, a second submission clears both
-// guards and double-bills a live TCR registration (ai-review finding, PR #1326). This timeout, well
+// guards and double-bills a live TCR registration. This timeout, well
 // under the TTL, guarantees the call resolves (as a `status: null` failure, taking the `held`
 // branch below) before that can happen.
 const BRAND_CREATE_TIMEOUT_MS = 60_000;
@@ -60,7 +60,7 @@ const BRAND_CREATE_TIMEOUT_MS = 60_000;
  *
  * The claim has three lifecycles, tracked via `sms_consent_send_claim.status`, not treated
  * uniformly (two earlier versions of this fix each got this wrong in opposite directions — see the
- * two ai-review-found bugs below):
+ * two bugs below):
  * - **Released** (row deleted) as soon as it's provably safe: `saveBrandStatus` persists (the
  *   durable guard from then on is `account_link.brand_id` itself, which the locked re-read above
  *   already checks), or `/brand` is definitively rejected (a real HTTP status came back — nothing
@@ -148,7 +148,7 @@ export const createBrandStep = createStep("create-brand", async (input: CreateBr
 		// queues SQS and responds, so an SQS failure or a gateway 502/504 after that point still
 		// returns a real non-2xx status with the fee already reserved and a live brand already queued
 		// for TCR registration. An earlier version of this fix treated "any real HTTP status" as safe
-		// to release, which missed exactly this 5xx case (ai-review finding, PR #1326).
+		// to release, which missed exactly this 5xx case.
 		if (response?.status == null || response.status >= 500) {
 			// Marked `held`, not just left alone: a `pending` claim ages out via CLAIM_TTL_MINUTES, and
 			// this specific claim must NOT — it's the one case that TTL's own comment says must survive.

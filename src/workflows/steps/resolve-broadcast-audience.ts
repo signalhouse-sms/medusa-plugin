@@ -18,7 +18,7 @@ type ConsentRow = { phone_number: string; customer_id: string | null };
 // A hard ceiling on one broadcast's audience: the resolved list is bulk-inserted as one
 // `broadcast_recipient` row per recipient and passed through a workflow step's `StepResponse`,
 // which the workflow engine serializes and persists as step output. Above this, that insert and
-// serialization are the actual risk, not the query — see the migration in this same PR
+// serialization are the actual risk, not the query — see the migration
 // (`Migration20260905231500`) for the covering index that keeps the query itself cheap regardless
 // of table size.
 const MAX_AUDIENCE_SIZE = 100_000;
@@ -45,7 +45,7 @@ const MAX_AUDIENCE_SIZE = 100_000;
  * `workflows/steps/grant-join-consent.ts`), which is deliberately customer-less (a carrier-confirmed
  * inbound SMS can't be tied to a browsing session — see that consent module's own JSDoc). Filtering
  * on `customerId` would silently resolve every group-scoped broadcast to zero recipients today,
- * marked `sent` with nobody actually messaged (ai-review, PR #1318, round 1) — phone number is this
+ * marked `sent` with nobody actually messaged — phone number is this
  * module's own stated identity anchor, and matching on it works whether or not a future consent
  * path ever populates `customer_id`.
  *
@@ -64,8 +64,7 @@ const MAX_AUDIENCE_SIZE = 100_000;
  * already-eligible rows; filtering revoked rows in JS after a SQL-side LIMIT would let the LIMIT
  * quietly truncate to fewer than `MAX_AUDIENCE_SIZE` real recipients (some of the capped page turns
  * out revoked and gets dropped) without ever tripping the overflow check below — a large store with
- * many revocations could silently under-deliver a broadcast with no error raised at all (ai-review,
- * PR #1318, round 3).
+ * many revocations could silently under-deliver a broadcast with no error raised at all.
  * @param {ResolveBroadcastAudienceStepInput} input - The optional customer-group scope.
  * @returns {Promise<StepResponse>} The resolved recipient list.
  * @throws {MedusaError} - When `customerGroupId` doesn't resolve to a real customer group
@@ -121,7 +120,7 @@ export const resolveBroadcastAudienceStep = createStep(
 					// it after (filtering in JS on an already phone_number-limited page) would let the
 					// LIMIT quietly truncate to fewer than MAX_AUDIENCE_SIZE eligible recipients without
 					// ever tripping the overflow check below, since JS-side filtering can only shrink an
-					// already-capped set (ai-review, PR #1318, round 3).
+					// already-capped set.
 					`select phone_number, customer_id from (
 					   select distinct on (phone_number) phone_number, customer_id, revoked_at
 					   from consent_record

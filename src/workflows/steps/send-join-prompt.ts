@@ -16,8 +16,7 @@ export type SendJoinPromptStepInput = {
  * This is very often the first message the store has ever sent this number (the recipient hasn't
  * replied JOIN yet, so no confirmation has gone out either) — it must carry the CTIA opt-out
  * disclosure exactly like every other send site, via the shared `withStopFooter` (an earlier
- * version of this step sent a bare body with no disclosure and no history check, a real
- * ai-review-caught regression).
+ * version of this step sent a bare body with no disclosure and no history check).
  * @param {SendJoinPromptStepInput} input - The phone number to prompt.
  * @returns {Promise<StepResponse>} The created notification.
  */

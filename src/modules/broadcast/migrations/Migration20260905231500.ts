@@ -11,7 +11,7 @@ import { Migration } from "@medusajs/framework/mikro-orm/migrations";
  * before it can register at all, unlike `consent_record`/`message_log` — those are OTHER PLUGIN
  * MODULES' own tables, each tracked by its own independent migration history with no guaranteed
  * ordering against this module's. Two migrations that mistakenly lived here for those tables
- * (ai-review, PR #1318, round 4 — directory-scan module registration order is not guaranteed to
+ * (directory-scan module registration order is not guaranteed to
  * put `broadcast`'s migrations after `sms-consent`'s/`message-log`'s, so `CREATE INDEX ... ON
  * "consent_record"`/`"message_log"` here could run before those tables exist on a fresh install
  * and abort this migration) now live in their owning modules instead:

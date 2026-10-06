@@ -62,9 +62,8 @@ function formatCurrency(amount: number, currencyCode: string | null): string {
 }
 
 /**
- * The Signal House analytics dashboard: delivery rate (Phase 1), cart-save rate and revenue
- * attribution (Phase 3), and ROI (Phase 3, using the merchant-set cost-per-segment on the Settings
- * page). All 4 panels read existing admin routes — this page has no logic of its own beyond
+ * The Signal House analytics dashboard: delivery rate, cart-save rate and revenue attribution, and
+ * ROI (using the merchant-set cost-per-segment on the Settings page). All 4 panels read existing admin routes — this page has no logic of its own beyond
  * fetching and formatting.
  * @returns {JSX.Element} The page.
  */
@@ -88,8 +87,7 @@ const SignalHouseAnalyticsPage = () => {
 		// The 30-day and 365-day windows cost very differently to compute (both routes scan
 		// `message_log` over the window), so a slower older request can resolve after a faster
 		// newer one and overwrite it with stale numbers under the current window's label — this
-		// flag drops any response that isn't from the most recently fired effect (ai-review, PR
-		// #1322).
+		// flag drops any response that isn't from the most recently fired effect.
 		let cancelled = false;
 		const since = new Date(Date.now() - Number(windowDays) * 24 * 60 * 60 * 1000).toISOString();
 		setLoading(true);

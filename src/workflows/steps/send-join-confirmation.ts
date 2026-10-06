@@ -7,9 +7,8 @@ const JOIN_CONFIRMATION_TEXT = "You're subscribed to text updates. Msg&data rate
 const CLAIM_KEY_PREFIX = "join-confirmation:";
 // Bounds the claim by age so a crash between the claim commit and the release below (a deploy or
 // restart mid-send) self-heals instead of permanently blocking this one JOIN reply's confirmation
-// with no in-product recovery (same class of gap ai-review found in create-brand.ts/
-// grant-join-consent.ts, PR #1326 — fixed here too for consistency, not itself flagged since this
-// file predates that PR's diff).
+// with no in-product recovery (same class of gap fixed in create-brand.ts/
+// grant-join-consent.ts, fixed here too for consistency).
 const CLAIM_TTL_MINUTES = 5;
 
 export type SendJoinConfirmationStepInput = {

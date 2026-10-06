@@ -10,7 +10,7 @@ import { Migration } from "@medusajs/framework/mikro-orm/migrations";
  *
  * `converted_amount_cents` is `int`, not `real` — an earlier version of this migration used
  * `model.float()` (Postgres `real`, float4), which silently loses cent-level precision above
- * roughly $41,943 with no way to recover the true value afterward (ai-review, PR #1321). Amended in
+ * roughly $41,943 with no way to recover the true value afterward. Amended in
  * place rather than added as a follow-up migration since this PR was never merged with the `real`
  * column live anywhere.
  */

@@ -43,7 +43,7 @@ class JoinPromptCooldownError extends Error {}
  * actual residual risk.
  *
  * **Rate limiting, and why it's shaped this way** (this route's concurrency/failure-handling story
- * has been wrong twice before, per ai-review — documented so the next change doesn't repeat any of
+ * has been wrong twice before — documented so the next change doesn't repeat any of
  * these): one claim per (normalized) phone number per hour, reserved atomically via a
  * `pg_advisory_xact_lock` keyed on a hash of the *phone number* (not a single fixed key, so
  * different numbers never serialize against each other) around a short, database-only
@@ -115,7 +115,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse): Promise<voi
 	// 'pending' row, and 'pending' blocks every future request for that number the same as a
 	// 'succeeded' one (see below) — so a request rejected here must never have written one, or the
 	// number would be locked out for the rest of the cooldown window despite no send ever having
-	// been attempted (a real bug, found by ai-review, when this check ran after the reservation).
+	// been attempted (a real bug when this check ran after the reservation).
 	const hourStart = new Date(Date.now() - 60 * 60 * 1000);
 	const { rows: overCap } = await pgConnection.raw(
 		`select 1 from sms_consent_send_claim where claim_key like ? and created_at > ? order by created_at desc offset ? limit 1`,
