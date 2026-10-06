@@ -18,6 +18,8 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # Must match the environment on the npm trusted publisher.
+    environment: Main
     steps:
       - uses: actions/checkout@v5
 
