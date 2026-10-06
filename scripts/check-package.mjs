@@ -6,10 +6,12 @@ import { fileURLToPath } from "node:url";
 
 const packageRoot = fileURLToPath(new URL("../", import.meta.url));
 const manifest = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
-const [packed] = JSON.parse(execFileSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], {
+const packOutput = JSON.parse(execFileSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], {
   cwd: packageRoot,
   encoding: "utf8",
 }));
+// npm 11 prints an array of packed packages; npm 12 prints an object keyed by package name.
+const packed = Array.isArray(packOutput) ? packOutput[0] : Object.values(packOutput)[0];
 const files = new Set(packed.files.map(({ path }) => path));
 
 /**
