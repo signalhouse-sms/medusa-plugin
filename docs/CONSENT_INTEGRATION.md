@@ -63,6 +63,10 @@ A `429` from this route means the phone number already has a claim in flight (ra
 prompt per number per hour) — treat it the same as a success in your UI, since a prompt has already
 gone out to that number recently.
 
+A number that texted STOP and hasn't opted back in gets no prompt, and the route answers with the
+same `429` as a cooldown. It deliberately doesn't say why, because anyone can type that number into
+a checkout form. The customer can still text JOIN to opt back in.
+
 ## What a JOIN reply actually grants
 
 A single JOIN reply grants **all four** consent purposes for that phone number at once —

@@ -154,15 +154,18 @@ export default async function cartAbandonmentJob(container: MedusaContainer) {
 	// (as an earlier version of this job did) reproduces the same stuck-page failure this whole
 	// query was rewritten to avoid: an unstamped, unfilterable row that resorts to the front of
 	// every future page forever.
+	// Adding or removing an item doesn't bump `cart.updated_at`, so recent line-item activity also
+	// counts as "not abandoned" (a shopper was texted minutes after adding an item).
 	const { rows } = await pgConnection.raw(
 		`select id from cart
 		 where completed_at is null and deleted_at is null
 		   and updated_at < ? and updated_at > ?
 		   and (metadata ->> ?) is null
 		   and exists (select 1 from cart_line_item li where li.cart_id = cart.id and li.deleted_at is null)
+		   and not exists (select 1 from cart_line_item li where li.cart_id = cart.id and (li.updated_at >= ? or li.deleted_at >= ?))
 		 order by updated_at asc
 		 limit ?`,
-		[threshold.toISOString(), windowStart.toISOString(), CHECKED_AT_METADATA_KEY, PAGE_SIZE],
+		[threshold.toISOString(), windowStart.toISOString(), CHECKED_AT_METADATA_KEY, threshold.toISOString(), threshold.toISOString(), PAGE_SIZE],
 	);
 	const cartIds: string[] = rows.map((r: { id: string }) => r.id);
 	if (!cartIds.length) {

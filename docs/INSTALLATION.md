@@ -105,7 +105,7 @@ are off by default so you can plan send timing and consent for your own customer
 | Variable | Required for | Notes |
 |---|---|---|
 | `SIGNALHOUSE_API_BASE_URL` | Non-production account linking and shared API operations | Defaults to `https://v2.signalhouse.io`. If you change it, set the notification provider's `baseUrl` option to match. |
-| `SIGNALHOUSE_SETTINGS_ENCRYPTION_KEY` | Connecting an account in the admin | 64 hex characters (32 bytes). Only checked the first time you connect an account. |
+| `SIGNALHOUSE_SETTINGS_ENCRYPTION_KEY` | Connecting an account in the admin | 64 hex characters (32 bytes). Used every time the stored API key is read, not just when you connect. Don't change it after connecting: the stored key becomes unreadable and the Signal House admin page errors. |
 | `SIGNALHOUSE_WEBHOOK_SIGNING_SECRET` | JOIN/STOP keyword handling, delivery tracking | The signing secret of the webhook endpoint from step 6. |
 | `SIGNALHOUSE_CART_ABANDONMENT_ENABLED` | Cart-recovery texts | `"true"` to enable. Off by default — read the compliance checklist first. Only carts that become abandoned after the job starts running are texted; carts already abandoned at that point are not. Off for more than 2 hours counts as a fresh start. |
 | `SIGNALHOUSE_CART_ABANDONMENT_THRESHOLD_MINUTES` | Cart-recovery texts | Default 60. |

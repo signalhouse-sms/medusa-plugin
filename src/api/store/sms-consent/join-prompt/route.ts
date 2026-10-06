@@ -95,6 +95,19 @@ export async function POST(req: MedusaRequest, res: MedusaResponse): Promise<voi
 		return;
 	}
 
+	// A number whose latest consent row is revoked has texted STOP. Don't prompt it again from a
+	// checkout form anyone can fill in with that number; the owner can still text JOIN to opt back in.
+	// The reply is the same as the cooldown's, so a caller can't use this route to learn who opted out.
+	const { rows: latestConsent } = await pgConnection.raw(
+		`select revoked_at from consent_record where phone_number = ? and deleted_at is null order by granted_at desc limit 1`,
+		[normalizedPhone],
+	);
+	if (latestConsent[0]?.revoked_at) {
+		logger.info(`signalhouse-sms: join-prompt suppressed for ${normalizedPhone}, number has opted out`);
+		res.status(429).json({ message: "a join prompt was already sent to this number recently" });
+		return;
+	}
+
 	const claimKey = `${CLAIM_KEY_PREFIX}${normalizedPhone}`;
 	const cooldownStart = new Date(Date.now() - JOIN_PROMPT_COOLDOWN_MINUTES * 60 * 1000);
 

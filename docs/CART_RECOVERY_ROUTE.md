@@ -18,16 +18,21 @@ enforce.
 
 Mirrors the cookie convention Medusa's own official starter (`dtc-starter`, and its now-deprecated
 predecessor `nextjs-starter-medusa`) uses in `src/lib/data/cookies.ts`'s `setCartId`, so the rest of
-a storefront built on that starter picks up the restored cart with no further changes:
+a storefront built on that starter picks up the restored cart with no further changes.
+
+The starter's middleware prefixes every path with a country code (`/cart-recover` becomes
+`/dk/cart-recover`), so the route lives under `[countryCode]`. A route at `app/cart-recover` returns
+404 on the starter.
 
 ```ts
-// app/cart-recover/route.ts
+// src/app/[countryCode]/cart-recover/route.ts
 import { NextRequest, NextResponse } from "next/server"
 import Medusa from "@medusajs/js-sdk"
 
 const sdk = new Medusa({ baseUrl: process.env.MEDUSA_BACKEND_URL!, publishableKey: process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY! })
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ countryCode: string }> }) {
+  const { countryCode } = await params
   const cartId = request.nextUrl.searchParams.get("cart_id")
   if (!cartId) {
     return NextResponse.redirect(new URL("/", request.url))
@@ -41,13 +46,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url))
   }
 
-  const response = NextResponse.redirect(new URL("/cart", request.url))
-  // Same shape as the starter's own setCartId (src/lib/data/cookies.ts) — the rest of the
-  // storefront's existing cart logic picks this up with no further changes.
+  const response = NextResponse.redirect(new URL(`/${countryCode}/cart`, request.url))
+  // Same shape as the starter's own setCartId (src/lib/data/cookies.ts), so the rest of the
+  // storefront's cart logic picks this up. sameSite must be "lax": the visitor arrives from a link
+  // in an SMS app, and a "strict" cookie isn't sent on that cross-site navigation, so the cart
+  // page would render empty.
   response.cookies.set("_medusa_cart_id", cartId, {
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
   })
   return response

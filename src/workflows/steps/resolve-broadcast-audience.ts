@@ -49,7 +49,7 @@ const MAX_AUDIENCE_SIZE = 100_000;
  * module's own stated identity anchor, and matching on it works whether or not a future consent
  * path ever populates `customer_id`.
  *
- * The group's member phones are pushed INTO the consent query (`phone_number IN (?)`) rather than
+ * The group's member phones are pushed INTO the consent query (bound as one JSON array) rather than
  * fetched unbounded and intersected in JS afterward — the two need to compose correctly with
  * `MAX_AUDIENCE_SIZE` below. A LIMIT on the raw consent scan alone, applied before intersecting with
  * a group, would silently truncate to whichever phone numbers sort first and then intersect that
@@ -100,20 +100,21 @@ export const resolveBroadcastAudienceStep = createStep(
 			}
 		}
 
-		// Knex expands an array bound to a positional `?` into a comma-separated parameter list —
-		// correct for `IN (?)`, but not for `= ANY(?)` (whose grammar wants exactly one array-typed
-		// expression): `IN (?)` is the binding shape knex actually renders for a bound array, so it's
-		// the only one used here regardless of which branch below runs.
+		// The member list is bound as ONE JSON string and unpacked in SQL. A JS array bound to `in (?)`
+		// reaches Postgres as a single array literal ('{"555...","918..."}'), so it matched nothing and
+		// every group broadcast resolved to zero recipients. One string binding also
+		// stays clear of Postgres's 65,535 bind-parameter limit at MAX_AUDIENCE_SIZE.
 		const { rows } = memberPhones
 			? await pgConnection.raw(
 					`select phone_number, customer_id from (
 					   select distinct on (phone_number) phone_number, customer_id, revoked_at
 					   from consent_record
-					   where purpose = 'marketing' and deleted_at is null and phone_number in (?)
+					   where purpose = 'marketing' and deleted_at is null
+					     and phone_number in (select jsonb_array_elements_text(?::jsonb))
 					   order by phone_number, granted_at desc
 					 ) latest
 					 where latest.revoked_at is null`,
-					[memberPhones],
+					[JSON.stringify(memberPhones)],
 				)
 			: await pgConnection.raw(
 					// The revoked filter is applied INSIDE the subquery, before the outer LIMIT — doing
