@@ -34,6 +34,17 @@ test("fetchBillingStatus returns the active subscription and funded wallet", asy
 	});
 });
 
+test("fetchBillingStatus reports the available balance, net of reserved funds", async () => {
+	const client = stubClient({
+		subscriptions: { success: true, data: [{ name: "Growth", status: "ACTIVE" }] },
+		wallet: { success: true, data: { balance: 25_000_000, reservedAmount: 4_000_000, currency: "USD", primaryPaymentMethodId: "pm_123" } },
+	});
+
+	const status = await fetchBillingStatus(client, "G1");
+
+	assert.equal(status.wallet?.balanceMicrodollars, 21_000_000);
+});
+
 test("fetchBillingStatus prefers an ACTIVE row over a PENDING_DOWNGRADE one", async () => {
 	const client = stubClient({
 		subscriptions: {

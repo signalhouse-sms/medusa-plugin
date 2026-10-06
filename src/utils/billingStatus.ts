@@ -2,7 +2,7 @@ import type { SignalHouseSDK } from "@signalhousellc/sdk";
 import { unwrapSignalHouseResponse } from "./signalHouseClient";
 
 type UserSubscription = { name: string; status: "ACTIVE" | "EXPIRED" | "PENDING_DOWNGRADE" };
-type Wallet = { balance: number; currency: string; primaryPaymentMethodId: string | null };
+type Wallet = { balance: number; reservedAmount?: number; currency: string; primaryPaymentMethodId: string | null };
 
 /** Caps each outbound call so a hung upstream degrades into an error field, not a stuck page load. */
 const BILLING_STATUS_TIMEOUT_MS = 5000;
@@ -63,7 +63,13 @@ export async function fetchBillingStatus(client: SignalHouseSDK, groupId: string
 		subscription: current ? { name: current.name, status: current.status } : null,
 		...(subscriptionResult.status === "rejected" ? { subscriptionError: toMessage(subscriptionResult.reason) } : {}),
 		wallet: wallet
-			? { balanceMicrodollars: wallet.balance, currency: wallet.currency, hasPaymentMethod: wallet.primaryPaymentMethodId != null }
+			? {
+					// What the merchant can spend: funds held for in-flight sends and registrations are not
+					// available, so show balance minus reserved, the same figure the Signal House portal shows.
+					balanceMicrodollars: wallet.balance - (wallet.reservedAmount ?? 0),
+					currency: wallet.currency,
+					hasPaymentMethod: wallet.primaryPaymentMethodId != null,
+				}
 			: null,
 		...(walletResult.status === "rejected" ? { walletError: toMessage(walletResult.reason) } : {}),
 	};

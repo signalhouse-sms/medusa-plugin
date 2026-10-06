@@ -466,7 +466,7 @@ function BillingStatusSection({ accountLink }: { accountLink: Extract<AccountLin
 
 			{status?.wallet ? (
 				<Text size="small" className="text-ui-fg-subtle">
-					Wallet balance: {formatWalletBalance(status.wallet.balanceMicrodollars, status.wallet.currency)} ·{" "}
+					Available balance: {formatWalletBalance(status.wallet.balanceMicrodollars, status.wallet.currency)} ·{" "}
 					{status.wallet.hasPaymentMethod ? "Payment method on file" : "No payment method on file"}
 				</Text>
 			) : (
