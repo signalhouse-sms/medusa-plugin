@@ -44,12 +44,12 @@
     "signalhouse"
   ],
   "scripts": {
-    "build": "medusa plugin:build",
+    "build": "medusa plugin:build && find .medusa/server -name '*.map' -delete",
     "dev": "medusa plugin:develop",
     "lint": "medusa lint",
     "test": "find src -name '*.test.ts' -print0 | xargs -0 node -r ts-node/register --test",
     "test:package": "npm run build && node scripts/check-package.mjs",
-    "prepublishOnly": "medusa plugin:build"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@signalhousellc/sdk": "^1.0.66"
