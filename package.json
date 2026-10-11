@@ -1,7 +1,7 @@
 {
   "name": "@signalhouse-sms/medusa-plugin",
-  "version": "0.1.3",
-  "description": "Signal House SMS notification provider and integration modules for Medusa.",
+  "version": "0.1.4",
+  "description": "Connects Medusa v2 stores to Signal House for SMS and 10DLC messaging: order and shipping texts, abandoned-cart recovery, consent, and marketing broadcasts.",
   "author": "Signal House",
   "license": "MIT",
   "homepage": "https://github.com/signalhouse-sms/medusa-plugin#readme",
@@ -36,9 +36,10 @@
   "keywords": [
     "medusa",
     "plugin",
-    "medusa-plugin-other",
     "medusa-plugin",
     "medusa-v2",
+    "medusa-plugin-integration",
+    "medusa-plugin-notification",
     "sms",
     "notification-provider",
     "signalhouse"

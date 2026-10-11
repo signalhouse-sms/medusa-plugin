@@ -32,6 +32,13 @@ Object.values(manifest.exports).forEach(checkTarget);
 assert.ok(files.has(".medusa/server/src/providers/signalhouse-sms/index.js"), "SMS provider missing from npm package");
 assert.equal(manifest.publishConfig?.access, "public", "Scoped package must publish with public access");
 
+// Medusa's integrations page scrapes npm for these keywords, plus exactly one category keyword.
+["medusa-v2", "medusa-plugin-integration", "medusa-plugin-notification"].forEach((keyword) =>
+  assert.ok(manifest.keywords?.includes(keyword), `Keyword missing for the Medusa integrations listing: ${keyword}`),
+);
+const MEDUSA_CATEGORIES = /^medusa-plugin-(analytics|auth|cms|notification|payment|search|shipping|other)$/;
+assert.equal(manifest.keywords.filter((keyword) => MEDUSA_CATEGORIES.test(keyword)).length, 1, "Use exactly one Medusa category keyword");
+
 [
   "README.md",
   "docs/INSTALLATION.md",
