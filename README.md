@@ -1,3 +1,12 @@
+<p align="center">
+  <a href="https://signalhouse.io">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/signalhouse-sms/medusa-plugin/main/.github/assets/logo-light.png">
+      <img src="https://raw.githubusercontent.com/signalhouse-sms/medusa-plugin/main/.github/assets/logo-dark.png" alt="Signal House" width="240">
+    </picture>
+  </a>
+</p>
+
 # Signal House for Medusa
 
 SMS for [Medusa](https://medusajs.com) stores, powered by [Signal House](https://signalhouse.io).
